@@ -23,13 +23,18 @@ export interface RouteMapping {
 }
 
 export const ROUTE_MAPPINGS: RouteMapping = {
+	// Navigation buttons
 	My_Work_Button: { route: "/projects" },
 	About_Button: { route: "/about" },
 	Contact_Button: { route: "/about" },
+
+	// Internal pages
 	Coffee: { route: "/coffee" },
-	Boba: { route: "/coffee" },
-	GitHub: { route: "https://github.com/dannywillowliu", external: true },
-	YouTube: { route: "/racing" },
-	Twitter: { route: "https://twitter.com", external: true },
-	Headphones: { route: "/music" },
+
+	// Social links
+	GitHub: { route: "https://github.com/dannywillowliu-uchi", external: true },
+	YouTube: { route: "https://www.youtube.com/@dannyliu7632", external: true },
+	Twitter: { route: "https://www.instagram.com/dannywillowliu", external: true }, // Instagram
+	Headphones: { route: "https://open.spotify.com/user/7j4f1rsug0ea38pk293fh1dht", external: true }, // Spotify
+	Boba: { route: "https://www.linkedin.com/in/dwliu2", external: true }, // LinkedIn
 };
