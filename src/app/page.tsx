@@ -1,13 +1,37 @@
-import Room from "@/components/room/Room";
+"use client";
+
+import dynamic from "next/dynamic";
+
+const Room3D = dynamic(() => import("@/components/room/Room3D"), {
+	ssr: false,
+	loading: () => (
+		<div className="absolute inset-0 flex items-center justify-center bg-[#D9CAD1]">
+			<div className="text-center">
+				<div className="inline-block w-8 h-8 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin mb-4" />
+				<p className="text-foreground/70">Loading room...</p>
+			</div>
+		</div>
+	),
+});
 
 export default function Home() {
 	return (
-		<main className="min-h-screen bg-background flex flex-col items-center justify-center">
-			<header className="text-center mb-4 pt-8">
-				<h1 className="text-3xl font-bold text-foreground">Danny&apos;s Room</h1>
-				<p className="text-foreground/70 mt-2">Click on objects to explore</p>
-			</header>
-			<Room />
+		<main className="h-screen bg-[#D9CAD1] flex flex-col overflow-hidden">
+			<div className="flex-1 relative min-h-0">
+				<Room3D />
+			</div>
+			<footer className="absolute bottom-2 left-0 right-0 text-center text-sm text-gray-500/70">
+				Based on{" "}
+				<a
+					href="https://github.com/andrewwoan/sooahs-room-folio"
+					target="_blank"
+					rel="noopener noreferrer"
+					className="underline hover:text-gray-600"
+				>
+					sooah&apos;s room folio
+				</a>{" "}
+				by Andrew Woan (MIT)
+			</footer>
 		</main>
 	);
 }
