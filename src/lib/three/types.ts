@@ -26,7 +26,7 @@ export const ROUTE_MAPPINGS: RouteMapping = {
 	// Navigation buttons
 	My_Work_Button: { route: "/projects" },
 	About_Button: { route: "/about" },
-	Contact_Button: { route: "/about" },
+	Contact_Button: { route: "mailto:dannywillowliu@uchicago.edu", external: true },
 
 	// Internal pages
 	Coffee: { route: "/coffee" },
