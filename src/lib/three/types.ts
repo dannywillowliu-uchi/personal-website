@@ -34,7 +34,10 @@ export const ROUTE_MAPPINGS: RouteMapping = {
 	// Social links
 	GitHub: { route: "https://github.com/dannywillowliu-uchi", external: true },
 	YouTube: { route: "https://www.youtube.com/@dannyliu7632", external: true },
-	Twitter: { route: "https://www.instagram.com/dannywillowliu", external: true }, // Instagram
 	Headphones: { route: "https://open.spotify.com/user/7j4f1rsug0ea38pk293fh1dht", external: true }, // Spotify
-	Boba: { route: "https://www.linkedin.com/in/dwliu2", external: true }, // LinkedIn
+
+	// New social icons (replaced Twitter and Boba in Blender model)
+	Instagram: { route: "https://www.instagram.com/dannywillowliu", external: true },
+	LinkedIn: { route: "https://www.linkedin.com/in/dwliu2", external: true },
+	TFT_Icon: { route: "https://tracker.gg/tft/profile/riot/dwliu%23once", external: true },
 };

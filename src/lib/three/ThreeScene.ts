@@ -63,7 +63,7 @@ export class ThreeScene {
 	private minuteHand: THREE.Mesh | null = null;
 
 	// Intro animation objects
-	private introObjects: Record<string, THREE.Mesh> = {};
+	private introObjects: Record<string, THREE.Object3D> = {};
 
 	// State
 	private isDisposed = false;
@@ -254,7 +254,7 @@ export class ThreeScene {
 	}
 
 	private loadModel(): void {
-		this.gltfLoader.load("/models/Room_Portfolio.glb", (glb) => {
+		this.gltfLoader.load("/models/Room_Portfolio_Modified.glb", (glb) => {
 			if (this.isDisposed) return;
 
 			let coffeePosition: THREE.Vector3 | null = null;
@@ -267,6 +267,11 @@ export class ThreeScene {
 
 				if (child.name.includes("Coffee")) {
 					coffeePosition = child.position.clone();
+				}
+
+				// Hide Twitter and Boba (replaced with Instagram and LinkedIn in Blender)
+				if (child.name.includes("Twitter") || child.name.includes("Boba")) {
+					child.visible = false;
 				}
 
 				this.applyMaterial(child);
@@ -327,13 +332,13 @@ export class ThreeScene {
 		// Store intro animation objects
 		const introNames = [
 			"Hanging_Plank_1", "Hanging_Plank_2", "My_Work_Button", "About_Button",
-			"Contact_Button", "Boba", "GitHub", "YouTube", "Twitter",
+			"Contact_Button", "GitHub", "YouTube", "Instagram", "LinkedIn", "TFT_Icon",
 		];
 
 		for (const name of introNames) {
 			if (child.name.includes(name)) {
 				this.introObjects[name] = child;
-				child.scale.set(0, 0, 0);
+				// Skip intro animation for now - show objects immediately
 				break;
 			}
 		}
@@ -352,6 +357,13 @@ export class ThreeScene {
 		} else if (child.name.includes("Bubble")) {
 			child.material = new THREE.MeshBasicMaterial({ color: 0xffffff });
 		} else {
+			// Social icons should keep their original materials from the GLB
+			const socialIcons = ["Instagram", "LinkedIn", "TFT_Icon", "YouTube", "GitHub"];
+			const isSocialIcon = socialIcons.some((icon) => child.name.includes(icon));
+			if (isSocialIcon) {
+				return; // Keep the material from the GLB
+			}
+
 			["First", "Second", "Third", "Fourth"].forEach((key) => {
 				if (child.name.includes(key)) {
 					child.material = this.roomMaterials[key];
@@ -441,30 +453,26 @@ export class ThreeScene {
 	}
 
 	private playIntroAnimation(): void {
-		const timeline = gsap.timeline({
-			defaults: { duration: 0.8, ease: "back.out(1.8)" },
-		});
-		timeline.timeScale(0.8);
+		// Directly animate all intro objects to scale 1
+		let delay = 0;
+		const allNames = [
+			"Hanging_Plank_1", "Hanging_Plank_2",
+			"My_Work_Button", "About_Button", "Contact_Button",
+			"GitHub", "YouTube", "Instagram", "LinkedIn", "TFT_Icon"
+		];
 
-		// Animate planks
-		if (this.introObjects["Hanging_Plank_1"]) {
-			timeline.to(this.introObjects["Hanging_Plank_1"].scale, { x: 1, y: 1, z: 1 });
-		}
-		if (this.introObjects["Hanging_Plank_2"]) {
-			timeline.to(this.introObjects["Hanging_Plank_2"].scale, { x: 1, y: 1, z: 1 }, "-=0.5");
-		}
-
-		// Animate buttons
-		["My_Work_Button", "About_Button", "Contact_Button"].forEach((name) => {
-			if (this.introObjects[name]) {
-				timeline.to(this.introObjects[name].scale, { x: 1, y: 1, z: 1 }, "-=0.6");
-			}
-		});
-
-		// Animate social icons
-		["Boba", "GitHub", "YouTube", "Twitter"].forEach((name, i) => {
-			if (this.introObjects[name]) {
-				timeline.to(this.introObjects[name].scale, { x: 1, y: 1, z: 1 }, i === 0 ? "+=0.2" : "-=0.5");
+		allNames.forEach((name) => {
+			const obj = this.introObjects[name];
+			if (obj) {
+				gsap.to(obj.scale, {
+					x: 1,
+					y: 1,
+					z: 1,
+					duration: 0.6,
+					delay: delay,
+					ease: "back.out(1.5)",
+				});
+				delay += 0.1;
 			}
 		});
 	}
@@ -527,7 +535,11 @@ export class ThreeScene {
 		for (const [key, mapping] of Object.entries(ROUTE_MAPPINGS)) {
 			if (object.name.includes(key)) {
 				if (mapping.external) {
-					window.open(mapping.route, "_blank", "noopener,noreferrer");
+					if (mapping.route.startsWith("mailto:")) {
+						window.location.href = mapping.route;
+					} else {
+						window.open(mapping.route, "_blank", "noopener,noreferrer");
+					}
 				} else {
 					this.router.push(mapping.route);
 				}
@@ -580,7 +592,9 @@ export class ThreeScene {
 				object.name.includes("My_Work_Button") ||
 				object.name.includes("GitHub") ||
 				object.name.includes("YouTube") ||
-				object.name.includes("Twitter")
+				object.name.includes("Instagram") ||
+				object.name.includes("LinkedIn") ||
+				object.name.includes("TFT_Icon")
 			) {
 				gsap.to(object.rotation, {
 					x: object.userData.initialRotation.x + Math.PI / 10,
@@ -590,7 +604,7 @@ export class ThreeScene {
 			}
 
 			// Position animations
-			if (object.name.includes("Boba") || object.name.includes("Name_Letter")) {
+			if (object.name.includes("LinkedIn") || object.name.includes("Name_Letter")) {
 				gsap.to(object.position, {
 					y: object.userData.initialPosition.y + 0.2,
 					duration: 0.5,
@@ -613,7 +627,9 @@ export class ThreeScene {
 				object.name.includes("My_Work_Button") ||
 				object.name.includes("GitHub") ||
 				object.name.includes("YouTube") ||
-				object.name.includes("Twitter")
+				object.name.includes("Instagram") ||
+				object.name.includes("LinkedIn") ||
+				object.name.includes("TFT_Icon")
 			) {
 				gsap.to(object.rotation, {
 					x: object.userData.initialRotation.x,
@@ -623,7 +639,7 @@ export class ThreeScene {
 			}
 
 			// Reset position
-			if (object.name.includes("Boba") || object.name.includes("Name_Letter")) {
+			if (object.name.includes("LinkedIn") || object.name.includes("Name_Letter")) {
 				gsap.to(object.position, {
 					y: object.userData.initialPosition.y,
 					duration: 0.3,
