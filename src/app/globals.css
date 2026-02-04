@@ -1,26 +1,48 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	/* Warm/Cozy Color Palette */
+	--background: #F5F0E6;
+	--foreground: #3D3229;
+
+	/* Wood tones */
+	--wood-dark: #8B6F4E;
+	--wood-light: #D4B896;
+
+	/* Accents */
+	--accent-orange: #E8A87C;
+	--accent-yellow: #F5D76E;
+
+	/* Highlights */
+	--highlight: #FFFEF5;
+	--glow: rgba(245, 215, 110, 0.4);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-wood-dark: var(--wood-dark);
+	--color-wood-light: var(--wood-light);
+	--color-accent-orange: var(--accent-orange);
+	--color-accent-yellow: var(--accent-yellow);
+	--color-highlight: var(--highlight);
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Room glow effect for clickable objects */
+.room-object-glow {
+	filter: drop-shadow(0 0 0 transparent);
+	transition: filter 0.3s ease;
+}
+
+.room-object-glow:hover {
+	filter: drop-shadow(0 0 8px var(--glow));
+	cursor: pointer;
 }
