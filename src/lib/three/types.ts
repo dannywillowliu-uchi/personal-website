@@ -40,4 +40,7 @@ export const ROUTE_MAPPINGS: RouteMapping = {
 	Instagram: { route: "https://www.instagram.com/dannywillowliu", external: true },
 	LinkedIn: { route: "https://www.linkedin.com/in/dwliu2", external: true },
 	TFT_Icon: { route: "https://tracker.gg/tft/profile/riot/dwliu%23once", external: true },
+
+	// Interactive objects
+	Screen: { route: "/games" },
 };

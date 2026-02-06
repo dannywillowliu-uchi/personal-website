@@ -46,8 +46,11 @@ export class ThreeScene {
 
 	// Interactive objects
 	private raycasterObjects: THREE.Object3D[] = [];
-	private hitboxToObjectMap: Map<THREE.Object3D, THREE.Mesh> = new Map();
+	private hitboxToObjectMap: Map<THREE.Object3D, THREE.Object3D> = new Map();
 	private currentHoveredObject: THREE.Object3D | null = null;
+
+	// Social icon Groups (multi-primitive meshes from GLTF)
+	private socialIconGroups: Set<THREE.Object3D> = new Set();
 
 	// Raycaster
 	private raycaster: THREE.Raycaster;
@@ -75,7 +78,7 @@ export class ThreeScene {
 		this.onLoadComplete = config.onLoadComplete;
 
 		this.scene = new THREE.Scene();
-		this.scene.background = new THREE.Color("#D9CAD1");
+		this.scene.background = new THREE.Color("#722F37");
 
 		this.clock = new THREE.Clock();
 		this.raycaster = new THREE.Raycaster();
@@ -157,22 +160,23 @@ export class ThreeScene {
 	}
 
 	private loadTextures(): void {
+		const v = "v=4";
 		const textureMap = {
 			First: {
-				day: "/textures/room/day/first_texture_set_day.webp",
-				night: "/textures/room/night/first_texture_set_night.webp",
+				day: `/textures/room/day/first_texture_set_day.webp?${v}`,
+				night: `/textures/room/night/first_texture_set_night.webp?${v}`,
 			},
 			Second: {
-				day: "/textures/room/day/second_texture_set_day.webp",
-				night: "/textures/room/night/second_texture_set_night.webp",
+				day: `/textures/room/day/second_texture_set_day.webp?${v}`,
+				night: `/textures/room/night/second_texture_set_night.webp?${v}`,
 			},
 			Third: {
-				day: "/textures/room/day/third_texture_set_day.webp",
-				night: "/textures/room/night/third_texture_set_night.webp",
+				day: `/textures/room/day/third_texture_set_day.webp?${v}`,
+				night: `/textures/room/night/third_texture_set_night.webp?${v}`,
 			},
 			Fourth: {
-				day: "/textures/room/day/fourth_texture_set_day.webp",
-				night: "/textures/room/night/fourth_texture_set_night.webp",
+				day: `/textures/room/day/fourth_texture_set_day.webp?${v}`,
+				night: `/textures/room/night/fourth_texture_set_night.webp?${v}`,
 			},
 		};
 
@@ -254,16 +258,37 @@ export class ThreeScene {
 	}
 
 	private loadModel(): void {
-		this.gltfLoader.load("/models/Room_Portfolio_Modified.glb", (glb) => {
+		this.gltfLoader.load("/models/Room_Portfolio_Modified.glb?v=13", (glb) => {
 			if (this.isDisposed) return;
 
 			let coffeePosition: THREE.Vector3 | null = null;
+			// TFT_Icon excluded - it's now a single-material Mesh (no ceramic backing)
+			const socialNames = ["GitHub", "YouTube", "Instagram", "LinkedIn"];
 
 			glb.scene.traverse((child) => {
+				// Detect social icon Groups (multi-primitive meshes from GLTF export)
+				// Each icon has 2 materials (backing + icon face), which GLTF exports as
+				// a Group with 2 child Meshes. We animate the Group so both move together.
+				const isSocialGroup = child.type === "Group" &&
+					socialNames.some((sn) => child.name.includes(sn));
+
+				if (isSocialGroup) {
+					this.socialIconGroups.add(child);
+					child.userData.initialScale = child.scale.clone();
+					child.userData.initialPosition = child.position.clone();
+					child.userData.initialRotation = child.rotation.clone();
+					return;
+				}
+
 				if (!(child instanceof THREE.Mesh)) return;
 
+				const isChildOfSocialIcon = child.parent != null &&
+					this.socialIconGroups.has(child.parent);
+
 				this.setupMeshUserData(child);
-				this.processSpecialMeshes(child);
+				if (!isChildOfSocialIcon) {
+					this.processSpecialMeshes(child);
+				}
 
 				if (child.name.includes("Coffee")) {
 					coffeePosition = child.position.clone();
@@ -275,8 +300,24 @@ export class ThreeScene {
 				}
 
 				this.applyMaterial(child);
-				this.setupInteractivity(child);
+				if (!isChildOfSocialIcon) {
+					this.setupInteractivity(child);
+				}
+
+				// Screen mesh: make it clickable even without "Raycaster" in the name
+				if (child.name === "Screen") {
+					child.userData.initialScale = child.scale.clone();
+					child.userData.initialPosition = child.position.clone();
+					child.userData.initialRotation = child.rotation.clone();
+					this.raycasterObjects.push(child);
+					this.hitboxToObjectMap.set(child, child);
+				}
 			});
+
+			// Setup interactivity for social icon Groups (one hitbox per Group)
+			for (const group of this.socialIconGroups) {
+				this.setupGroupInteractivity(group);
+			}
 
 			// Setup smoke
 			this.setupSmoke(coffeePosition);
@@ -329,16 +370,23 @@ export class ThreeScene {
 			}
 		}
 
+		// Adjust TFT icon to rest against the window
+		if (child.name.includes("TFT_Icon")) {
+			child.position.z -= 0.20;
+			child.rotation.x = -1.22;
+		}
+
 		// Store intro animation objects
+		// TFT_Icon is here (not in setupGroupInteractivity) because it's a single-material
+		// mesh after removing the ceramic backing, so GLTF loads it as a Mesh, not a Group.
 		const introNames = [
 			"Hanging_Plank_1", "Hanging_Plank_2", "My_Work_Button", "About_Button",
-			"Contact_Button", "GitHub", "YouTube", "Instagram", "LinkedIn", "TFT_Icon",
+			"Contact_Button", "TFT_Icon",
 		];
 
 		for (const name of introNames) {
 			if (child.name.includes(name)) {
 				this.introObjects[name] = child;
-				// Skip intro animation for now - show objects immediately
 				break;
 			}
 		}
@@ -392,6 +440,41 @@ export class ThreeScene {
 		}
 		this.raycasterObjects.push(hitbox);
 		this.hitboxToObjectMap.set(hitbox, child);
+	}
+
+	private setupGroupInteractivity(group: THREE.Object3D): void {
+		const box = new THREE.Box3().setFromObject(group);
+		const size = box.getSize(new THREE.Vector3());
+		const center = box.getCenter(new THREE.Vector3());
+
+		const hitboxGeometry = new THREE.BoxGeometry(
+			size.x * 1.1,
+			size.y * 1.75,
+			size.z * 1.1
+		);
+
+		const hitboxMaterial = new THREE.MeshBasicMaterial({
+			transparent: true,
+			opacity: 0,
+			visible: false,
+		});
+
+		const hitbox = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+		hitbox.position.copy(center);
+		hitbox.name = group.name + "_Hitbox";
+
+		this.scene.add(hitbox);
+		this.raycasterObjects.push(hitbox);
+		this.hitboxToObjectMap.set(hitbox, group);
+
+		// Store as intro animation object
+		const introSocialNames = ["GitHub", "YouTube", "Instagram", "LinkedIn"];
+		for (const name of introSocialNames) {
+			if (group.name.includes(name)) {
+				this.introObjects[name] = group;
+				break;
+			}
+		}
 	}
 
 	private createHitbox(originalObject: THREE.Mesh): THREE.Object3D {
@@ -722,7 +805,7 @@ export class ThreeScene {
 				}
 			}
 
-			if (currentIntersect.name.includes("Pointer")) {
+			if (currentIntersect.name.includes("Pointer") || currentIntersect.name === "Screen") {
 				document.body.style.cursor = "pointer";
 			} else {
 				document.body.style.cursor = "default";
