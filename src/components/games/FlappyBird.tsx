@@ -196,7 +196,7 @@ export default function FlappyBird() {
 				ref={canvasRef}
 				width={WIDTH}
 				height={HEIGHT}
-				className="border border-green-900/50 rounded cursor-pointer"
+				className="border border-green-900/50 cursor-pointer"
 			/>
 		</GameShell>
 	);

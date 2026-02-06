@@ -206,7 +206,7 @@ export default function Pong() {
 				ref={canvasRef}
 				width={WIDTH}
 				height={HEIGHT}
-				className="border border-green-900/50 rounded"
+				className="border border-green-900/50"
 			/>
 		</GameShell>
 	);

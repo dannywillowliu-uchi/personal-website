@@ -78,7 +78,7 @@ export class ThreeScene {
 		this.onLoadComplete = config.onLoadComplete;
 
 		this.scene = new THREE.Scene();
-		this.scene.background = new THREE.Color("#722F37");
+		this.scene.background = new THREE.Color("#D9CAD1");
 
 		this.clock = new THREE.Clock();
 		this.raycaster = new THREE.Raycaster();

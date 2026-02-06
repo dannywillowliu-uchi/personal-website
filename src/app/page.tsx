@@ -7,8 +7,8 @@ const Room3D = dynamic(() => import("@/components/room/Room3D"), {
 	loading: () => (
 		<div className="absolute inset-0 flex items-center justify-center bg-[#D9CAD1]">
 			<div className="text-center">
-				<div className="inline-block w-8 h-8 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin mb-4" />
-				<p className="text-foreground/70">Loading room...</p>
+				<div className="inline-block w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin mb-4" />
+				<p className="text-white/70">Loading room...</p>
 			</div>
 		</div>
 	),

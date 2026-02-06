@@ -141,21 +141,7 @@ export default function Game2048() {
 
 				const colors = TILE_COLORS[val] || TILE_COLORS[2048];
 				ctx.fillStyle = colors.bg;
-
-				// Rounded rectangle
-				const radius = 6;
-				ctx.beginPath();
-				ctx.moveTo(x + radius, y);
-				ctx.lineTo(x + CELL_SIZE - radius, y);
-				ctx.quadraticCurveTo(x + CELL_SIZE, y, x + CELL_SIZE, y + radius);
-				ctx.lineTo(x + CELL_SIZE, y + CELL_SIZE - radius);
-				ctx.quadraticCurveTo(x + CELL_SIZE, y + CELL_SIZE, x + CELL_SIZE - radius, y + CELL_SIZE);
-				ctx.lineTo(x + radius, y + CELL_SIZE);
-				ctx.quadraticCurveTo(x, y + CELL_SIZE, x, y + CELL_SIZE - radius);
-				ctx.lineTo(x, y + radius);
-				ctx.quadraticCurveTo(x, y, x + radius, y);
-				ctx.closePath();
-				ctx.fill();
+				ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
 
 				if (val > 0) {
 					ctx.fillStyle = colors.fg;
@@ -236,7 +222,7 @@ export default function Game2048() {
 				ref={canvasRef}
 				width={BOARD_SIZE}
 				height={BOARD_SIZE}
-				className="border border-green-900/50 rounded"
+				className="border border-green-900/50"
 			/>
 		</GameShell>
 	);
