@@ -294,11 +294,6 @@ export class ThreeScene {
 					coffeePosition = child.position.clone();
 				}
 
-				// Hide Twitter and Boba (replaced with Instagram and LinkedIn in Blender)
-				if (child.name.includes("Twitter") || child.name.includes("Boba")) {
-					child.visible = false;
-				}
-
 				this.applyMaterial(child);
 				if (!isChildOfSocialIcon) {
 					this.setupInteractivity(child);
@@ -324,10 +319,76 @@ export class ThreeScene {
 
 			this.scene.add(glb.scene);
 
+			// The "Second" wall mesh was accidentally deleted from the modified Blender model.
+			// Load it from the original GLB and clip exterior geometry to avoid artifacts.
+			const roomBox = new THREE.Box3();
+			glb.scene.traverse((child) => {
+				if (child instanceof THREE.Mesh && ["First", "Third", "Fourth"].includes(child.name)) {
+					roomBox.expandByObject(child);
+				}
+			});
+			this.loadMissingSecondMesh(roomBox);
+
 			// Play intro animation
 			this.playIntroAnimation();
 
 			this.onLoadComplete?.();
+		});
+	}
+
+	private loadMissingSecondMesh(roomBox: THREE.Box3): void {
+		this.gltfLoader.load("/models/Room_Portfolio.glb", (glb) => {
+			if (this.isDisposed) return;
+
+			glb.scene.traverse((child) => {
+				if (!(child instanceof THREE.Mesh) || child.name !== "Second") return;
+
+				// Bake the mesh's world transform into the geometry so we can
+				// compare vertex positions directly against the world-space roomBox.
+				child.updateWorldMatrix(true, false);
+				child.geometry.applyMatrix4(child.matrixWorld);
+
+				const pos = child.geometry.getAttribute("position");
+				const uv = child.geometry.getAttribute("uv");
+				const index = child.geometry.getIndex();
+
+				const newPos: number[] = [];
+				const newUv: number[] = [];
+				const centroid = new THREE.Vector3();
+
+				const addTri = (a: number, b: number, c: number) => {
+					centroid.set(
+						(pos.getX(a) + pos.getX(b) + pos.getX(c)) / 3,
+						(pos.getY(a) + pos.getY(b) + pos.getY(c)) / 3,
+						(pos.getZ(a) + pos.getZ(b) + pos.getZ(c)) / 3,
+					);
+					if (!roomBox.containsPoint(centroid)) return;
+					for (const idx of [a, b, c]) {
+						newPos.push(pos.getX(idx), pos.getY(idx), pos.getZ(idx));
+						if (uv) newUv.push(uv.getX(idx), uv.getY(idx));
+					}
+				};
+
+				if (index) {
+					for (let i = 0; i < index.count; i += 3) {
+						addTri(index.getX(i), index.getX(i + 1), index.getX(i + 2));
+					}
+				} else {
+					for (let i = 0; i < pos.count; i += 3) {
+						addTri(i, i + 1, i + 2);
+					}
+				}
+
+				const clipped = new THREE.BufferGeometry();
+				clipped.setAttribute("position", new THREE.Float32BufferAttribute(newPos, 3));
+				if (uv && newUv.length) {
+					clipped.setAttribute("uv", new THREE.Float32BufferAttribute(newUv, 2));
+				}
+
+				// Geometry is already in world space, so the mesh sits at origin
+				const mesh = new THREE.Mesh(clipped, this.roomMaterials["Second"]);
+				this.scene.add(mesh);
+			});
 		});
 	}
 
@@ -370,10 +431,9 @@ export class ThreeScene {
 			}
 		}
 
-		// Adjust TFT icon to rest against the window
+		// Nudge TFT icon slightly toward the window for a natural lean
 		if (child.name.includes("TFT_Icon")) {
-			child.position.z -= 0.20;
-			child.rotation.x = -1.22;
+			child.position.z -= 0.05;
 		}
 
 		// Store intro animation objects
