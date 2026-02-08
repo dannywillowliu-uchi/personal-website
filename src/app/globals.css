@@ -2,20 +2,20 @@
 
 :root {
 	/* Warm/Cozy Color Palette */
-	--background: #F5F0E6;
-	--foreground: #3D3229;
+	--background: #F0EDE4;
+	--foreground: #3A3630;
 
 	/* Wood tones */
-	--wood-dark: #8B6F4E;
-	--wood-light: #D4B896;
+	--wood-dark: #7D7259;
+	--wood-light: #C7BFA6;
 
 	/* Accents */
-	--accent-orange: #E8A87C;
-	--accent-yellow: #F5D76E;
+	--accent-orange: #C4A882;
+	--accent-yellow: #D4C26A;
 
 	/* Highlights */
-	--highlight: #FFFEF5;
-	--glow: rgba(245, 215, 110, 0.4);
+	--highlight: #F8F6EE;
+	--glow: rgba(200, 190, 110, 0.35);
 }
 
 @theme inline {

@@ -18,7 +18,7 @@ export default function ProjectCard({ repo, index }: ProjectCardProps) {
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ delay: index * 0.1, duration: 0.3 }}
-			whileHover={{ y: -4, boxShadow: "0 10px 30px -10px rgba(139, 111, 78, 0.3)" }}
+			whileHover={{ y: -4, boxShadow: "0 10px 30px -10px rgba(125, 114, 89, 0.3)" }}
 		>
 			<div className="flex items-start justify-between gap-4 mb-3">
 				<h3 className="text-lg font-semibold text-foreground truncate">
