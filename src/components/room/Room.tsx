@@ -15,24 +15,24 @@ export default function Room() {
 				<defs>
 					{/* Gradients for depth */}
 					<linearGradient id="wallLeft" x1="0%" y1="0%" x2="100%" y2="0%">
-						<stop offset="0%" stopColor="#E8E0D0" />
-						<stop offset="100%" stopColor="#F5EFE5" />
+						<stop offset="0%" stopColor="#E2E0D4" />
+						<stop offset="100%" stopColor="#EBE9DF" />
 					</linearGradient>
 					<linearGradient id="wallRight" x1="0%" y1="0%" x2="100%" y2="0%">
-						<stop offset="0%" stopColor="#F5EFE5" />
-						<stop offset="100%" stopColor="#EDE5D5" />
+						<stop offset="0%" stopColor="#EBE9DF" />
+						<stop offset="100%" stopColor="#E4E2D6" />
 					</linearGradient>
 					<linearGradient id="floor" x1="0%" y1="0%" x2="0%" y2="100%">
-						<stop offset="0%" stopColor="#D4B896" />
-						<stop offset="100%" stopColor="#C4A886" />
+						<stop offset="0%" stopColor="#C7BFA6" />
+						<stop offset="100%" stopColor="#B8B296" />
 					</linearGradient>
 					<linearGradient id="woodTop" x1="0%" y1="0%" x2="0%" y2="100%">
-						<stop offset="0%" stopColor="#A67C52" />
-						<stop offset="100%" stopColor="#8B6F4E" />
+						<stop offset="0%" stopColor="#9A8660" />
+						<stop offset="100%" stopColor="#7D7259" />
 					</linearGradient>
 					<linearGradient id="woodSide" x1="0%" y1="0%" x2="100%" y2="0%">
-						<stop offset="0%" stopColor="#7A5F42" />
-						<stop offset="100%" stopColor="#6B5238" />
+						<stop offset="0%" stopColor="#6E664D" />
+						<stop offset="100%" stopColor="#5F5842" />
 					</linearGradient>
 					<linearGradient id="screenGlow" x1="0%" y1="0%" x2="0%" y2="100%">
 						<stop offset="0%" stopColor="#2a3a4a" />
@@ -45,26 +45,26 @@ export default function Room() {
 				<polygon
 					points="100,150 400,50 400,350 100,450"
 					fill="url(#wallLeft)"
-					stroke="#D4C8B8"
+					stroke="#C8C4B6"
 					strokeWidth="2"
 				/>
 				{/* Back right wall */}
 				<polygon
 					points="400,50 700,150 700,450 400,350"
 					fill="url(#wallRight)"
-					stroke="#D4C8B8"
+					stroke="#C8C4B6"
 					strokeWidth="2"
 				/>
 				{/* Floor */}
 				<polygon
 					points="100,450 400,350 700,450 400,550"
 					fill="url(#floor)"
-					stroke="#C4A886"
+					stroke="#B8B296"
 					strokeWidth="2"
 				/>
 
 				{/* Floor pattern lines */}
-				<g stroke="#C4A886" strokeWidth="1" opacity="0.5">
+				<g stroke="#B8B296" strokeWidth="1" opacity="0.5">
 					<line x1="175" y1="425" x2="475" y2="525" />
 					<line x1="250" y1="400" x2="550" y2="500" />
 					<line x1="325" y1="375" x2="625" y2="475" />
@@ -78,8 +78,8 @@ export default function Room() {
 						{/* Window frame */}
 						<polygon
 							points="150,200 300,160 300,320 150,360"
-							fill="#8B6F4E"
-							stroke="#6B5238"
+							fill="#7D7259"
+							stroke="#5F5842"
 							strokeWidth="3"
 						/>
 						{/* Window glass - sky */}
@@ -88,15 +88,15 @@ export default function Room() {
 							fill="#87CEEB"
 						/>
 						{/* Window divider vertical */}
-						<line x1="225" y1="197" x2="225" y2="323" stroke="#8B6F4E" strokeWidth="4" />
+						<line x1="225" y1="197" x2="225" y2="323" stroke="#7D7259" strokeWidth="4" />
 						{/* Window divider horizontal */}
-						<line x1="165" y1="278" x2="285" y2="243" stroke="#8B6F4E" strokeWidth="4" />
+						<line x1="165" y1="278" x2="285" y2="243" stroke="#7D7259" strokeWidth="4" />
 						{/* Sun */}
 						<motion.circle
 							cx="260"
 							cy="200"
 							r="15"
-							fill="#F5D76E"
+							fill="#D4C26A"
 							animate={{ opacity: [0.9, 1, 0.9] }}
 							transition={{ duration: 3, repeat: Infinity }}
 						/>
@@ -111,12 +111,12 @@ export default function Room() {
 						{/* Window sill */}
 						<polygon
 							points="145,360 305,318 315,328 155,370"
-							fill="#A67C52"
-							stroke="#6B5238"
+							fill="#9A8660"
+							stroke="#5F5842"
 							strokeWidth="1"
 						/>
 						{/* Small plant */}
-						<ellipse cx="200" cy="338" rx="15" ry="8" fill="#E8A87C" />
+						<ellipse cx="200" cy="338" rx="15" ry="8" fill="#C4A882" />
 						<ellipse cx="200" cy="332" rx="10" ry="8" fill="#4a7c59" />
 						<ellipse cx="195" cy="328" rx="6" ry="5" fill="#5a8c69" />
 						<ellipse cx="205" cy="330" rx="5" ry="4" fill="#5a8c69" />
@@ -129,12 +129,12 @@ export default function Room() {
 						{/* Shelf back */}
 						<polygon
 							points="520,180 620,210 620,380 520,350"
-							fill="#7A5F42"
+							fill="#6E664D"
 						/>
 						{/* Shelf left side */}
 						<polygon
 							points="500,190 520,180 520,350 500,360"
-							fill="#6B5238"
+							fill="#5F5842"
 						/>
 						{/* Shelf top */}
 						<polygon
@@ -142,22 +142,22 @@ export default function Room() {
 							fill="url(#woodTop)"
 						/>
 						{/* Shelves */}
-						<polygon points="505,250 600,275 600,280 505,255" fill="#8B6F4E" />
-						<polygon points="505,310 600,335 600,340 505,315" fill="#8B6F4E" />
+						<polygon points="505,250 600,275 600,280 505,255" fill="#7D7259" />
+						<polygon points="505,310 600,335 600,340 505,315" fill="#7D7259" />
 						{/* Books top shelf */}
-						<rect x="510" y="200" width="12" height="45" fill="#E8A87C" transform="skewY(5)" />
+						<rect x="510" y="200" width="12" height="45" fill="#C4A882" transform="skewY(5)" />
 						<rect x="524" y="202" width="10" height="42" fill="#3D5A80" transform="skewY(5)" />
 						<rect x="536" y="198" width="14" height="48" fill="#98C1D9" transform="skewY(5)" />
 						<rect x="552" y="201" width="11" height="44" fill="#EE6C4D" transform="skewY(5)" />
 						<rect x="565" y="199" width="13" height="46" fill="#293241" transform="skewY(5)" />
 						{/* Books middle shelf */}
-						<rect x="510" y="258" width="15" height="48" fill="#F5D76E" transform="skewY(5)" />
+						<rect x="510" y="258" width="15" height="48" fill="#D4C26A" transform="skewY(5)" />
 						<rect x="527" y="260" width="12" height="45" fill="#4a7c59" transform="skewY(5)" />
-						<rect x="541" y="257" width="10" height="50" fill="#8B6F4E" transform="skewY(5)" />
+						<rect x="541" y="257" width="10" height="50" fill="#7D7259" transform="skewY(5)" />
 						<rect x="553" y="259" width="14" height="47" fill="#c0392b" transform="skewY(5)" />
 						{/* Bottom shelf items */}
-						<rect x="510" y="320" width="25" height="32" fill="#D4B896" transform="skewY(5)" stroke="#8B6F4E" strokeWidth="1" />
-						<rect x="545" y="318" width="20" height="35" fill="#3D3229" transform="skewY(5)" />
+						<rect x="510" y="320" width="25" height="32" fill="#C7BFA6" transform="skewY(5)" stroke="#7D7259" strokeWidth="1" />
+						<rect x="545" y="318" width="20" height="35" fill="#3A3630" transform="skewY(5)" />
 					</g>
 				</RoomObject>
 
@@ -168,35 +168,35 @@ export default function Room() {
 					<polygon
 						points="280,380 450,340 550,390 380,430"
 						fill="url(#woodTop)"
-						stroke="#6B5238"
+						stroke="#5F5842"
 						strokeWidth="2"
 					/>
 					{/* Desk front */}
 					<polygon
 						points="280,380 380,430 380,480 280,430"
 						fill="url(#woodSide)"
-						stroke="#6B5238"
+						stroke="#5F5842"
 						strokeWidth="1"
 					/>
 					{/* Desk right side */}
 					<polygon
 						points="380,430 550,390 550,440 380,480"
-						fill="#8B6F4E"
-						stroke="#6B5238"
+						fill="#7D7259"
+						stroke="#5F5842"
 						strokeWidth="1"
 					/>
 					{/* Desk drawer */}
 					<polygon
 						points="300,395 360,415 360,455 300,435"
-						fill="#9B7F5E"
-						stroke="#6B5238"
+						fill="#8E8462"
+						stroke="#5F5842"
 						strokeWidth="1"
 					/>
-					<ellipse cx="330" cy="425" rx="6" ry="3" fill="#6B5238" />
+					<ellipse cx="330" cy="425" rx="6" ry="3" fill="#5F5842" />
 					{/* Desk legs */}
-					<polygon points="290,430 300,428 300,490 290,492" fill="#6B5238" />
-					<polygon points="370,475 380,473 380,535 370,537" fill="#6B5238" />
-					<polygon points="530,435 540,433 540,495 530,497" fill="#7A5F42" />
+					<polygon points="290,430 300,428 300,490 290,492" fill="#5F5842" />
+					<polygon points="370,475 380,473 380,535 370,537" fill="#5F5842" />
+					<polygon points="530,435 540,433 540,495 530,497" fill="#6E664D" />
 
 					{/* Computer - clickable */}
 					<RoomObject href="/projects" label="Computer - Projects">
@@ -232,7 +232,7 @@ export default function Room() {
 							{/* Monitor stand */}
 							<polygon
 								points="375,365 395,360 400,375 380,380"
-								fill="#3D3229"
+								fill="#3A3630"
 							/>
 							<polygon
 								points="365,378 405,368 410,372 370,382"
@@ -241,7 +241,7 @@ export default function Room() {
 							{/* Keyboard */}
 							<polygon
 								points="360,385 440,365 450,375 370,395"
-								fill="#3D3229"
+								fill="#3A3630"
 								stroke="#2A231C"
 								strokeWidth="1"
 							/>
@@ -255,7 +255,7 @@ export default function Room() {
 								))}
 							</g>
 							{/* Mouse */}
-							<ellipse cx="465" cy="378" rx="8" ry="12" fill="#3D3229" transform="rotate(-15 465 378)" />
+							<ellipse cx="465" cy="378" rx="8" ry="12" fill="#3A3630" transform="rotate(-15 465 378)" />
 						</g>
 					</RoomObject>
 
@@ -263,18 +263,18 @@ export default function Room() {
 					<RoomObject href="/coffee" label="Coffee mug - Coffee log">
 						<g id="coffee">
 							{/* Mug body */}
-							<ellipse cx="490" cy="365" rx="18" ry="10" fill="#D4B896" />
+							<ellipse cx="490" cy="365" rx="18" ry="10" fill="#C7BFA6" />
 							<path
 								d="M 472 365 L 474 395 Q 474 405 490 405 Q 506 405 506 395 L 508 365"
-								fill="#D4B896"
-								stroke="#8B6F4E"
+								fill="#C7BFA6"
+								stroke="#7D7259"
 								strokeWidth="1"
 							/>
 							{/* Mug handle */}
 							<path
 								d="M 506 372 Q 522 372 522 385 Q 522 398 506 398"
 								fill="none"
-								stroke="#8B6F4E"
+								stroke="#7D7259"
 								strokeWidth="4"
 								strokeLinecap="round"
 							/>
@@ -300,11 +300,11 @@ export default function Room() {
 				<RoomObject href="/music" label="Music corner - Spotify">
 					<g id="music">
 						{/* Small side table */}
-						<polygon points="130,420 200,400 240,420 170,440" fill="url(#woodTop)" stroke="#6B5238" strokeWidth="1" />
+						<polygon points="130,420 200,400 240,420 170,440" fill="url(#woodTop)" stroke="#5F5842" strokeWidth="1" />
 						<polygon points="130,420 170,440 170,480 130,460" fill="url(#woodSide)" />
-						<polygon points="170,440 240,420 240,460 170,480" fill="#8B6F4E" />
+						<polygon points="170,440 240,420 240,460 170,480" fill="#7D7259" />
 						{/* Record player base */}
-						<polygon points="145,400 210,385 235,400 170,415" fill="#3D3229" stroke="#2A231C" strokeWidth="1" />
+						<polygon points="145,400 210,385 235,400 170,415" fill="#3A3630" stroke="#2A231C" strokeWidth="1" />
 						{/* Platter */}
 						<ellipse cx="180" cy="395" rx="25" ry="12" fill="#1a1a1a" />
 						{/* Record */}
@@ -322,16 +322,16 @@ export default function Room() {
 						<ellipse cx="180" cy="395" rx="15" ry="7" fill="none" stroke="#222" strokeWidth="0.5" />
 						<ellipse cx="180" cy="395" rx="10" ry="5" fill="none" stroke="#222" strokeWidth="0.5" />
 						{/* Record label */}
-						<ellipse cx="180" cy="395" rx="5" ry="2.5" fill="#E8A87C" />
+						<ellipse cx="180" cy="395" rx="5" ry="2.5" fill="#C4A882" />
 						{/* Tonearm */}
-						<line x1="215" y1="385" x2="195" y2="392" stroke="#8B6F4E" strokeWidth="2" />
-						<circle cx="215" cy="385" r="3" fill="#8B6F4E" />
+						<line x1="215" y1="385" x2="195" y2="392" stroke="#7D7259" strokeWidth="2" />
+						<circle cx="215" cy="385" r="3" fill="#7D7259" />
 						{/* Music notes */}
 						<motion.text
 							x="160"
 							y="375"
 							fontSize="14"
-							fill="#E8A87C"
+							fill="#C4A882"
 							animate={{ y: [375, 365, 375], opacity: [0.5, 1, 0.5] }}
 							transition={{ duration: 2, repeat: Infinity }}
 						>
@@ -341,7 +341,7 @@ export default function Room() {
 							x="200"
 							y="370"
 							fontSize="12"
-							fill="#F5D76E"
+							fill="#D4C26A"
 							animate={{ y: [370, 362, 370], opacity: [0.4, 0.9, 0.4] }}
 							transition={{ duration: 2.5, repeat: Infinity, delay: 0.3 }}
 						>
@@ -394,7 +394,7 @@ export default function Room() {
 				{/* Ambient light from window */}
 				<motion.polygon
 					points="145,360 400,350 380,480 100,450"
-					fill="#F5D76E"
+					fill="#D4C26A"
 					opacity="0.05"
 					animate={{ opacity: [0.03, 0.07, 0.03] }}
 					transition={{ duration: 6, repeat: Infinity }}
@@ -415,7 +415,7 @@ export default function Room() {
 							cx={p.cx}
 							cy={p.cy}
 							r="1.5"
-							fill="#F5D76E"
+							fill="#D4C26A"
 							animate={{
 								y: [0, -15, 0],
 								opacity: [0.2, 0.6, 0.2],

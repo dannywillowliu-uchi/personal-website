@@ -78,7 +78,7 @@ export class ThreeScene {
 		this.onLoadComplete = config.onLoadComplete;
 
 		this.scene = new THREE.Scene();
-		this.scene.background = new THREE.Color("#D9CAD1");
+		this.scene.background = new THREE.Color("#C5CCBE");
 
 		this.clock = new THREE.Clock();
 		this.raycaster = new THREE.Raycaster();
@@ -455,7 +455,7 @@ export class ThreeScene {
 	private applyMaterial(child: THREE.Mesh): void {
 		if (child.name.includes("Water")) {
 			child.material = new THREE.MeshBasicMaterial({
-				color: 0x558bc8,
+				color: 0x6B9EB5,
 				transparent: true,
 				opacity: 0.4,
 				depthWrite: false,

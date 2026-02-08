@@ -44,7 +44,7 @@ export default function Room3D() {
 	return (
 		<div className="absolute inset-0">
 			{isLoading && (
-				<div className="absolute inset-0 flex items-center justify-center bg-[#D9CAD1] z-10">
+				<div className="absolute inset-0 flex items-center justify-center bg-[#C5CCBE] z-10">
 					<div className="text-center">
 						<div className="inline-block w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin mb-4" />
 						<p className="text-white/70">Loading room...</p>
