@@ -262,7 +262,8 @@ export class ThreeScene {
 			if (this.isDisposed) return;
 
 			let coffeePosition: THREE.Vector3 | null = null;
-			// TFT_Icon excluded - it's now a single-material Mesh (no ceramic backing)
+			let tftMesh: THREE.Mesh | null = null as THREE.Mesh | null;
+			let socialBackingMaterial: THREE.Material | null = null as THREE.Material | null;
 			const socialNames = ["GitHub", "YouTube", "Instagram", "LinkedIn"];
 
 			glb.scene.traverse((child) => {
@@ -295,6 +296,17 @@ export class ThreeScene {
 				}
 
 				this.applyMaterial(child);
+
+				if (child.name.includes("TFT_Icon")) {
+					tftMesh = child;
+				}
+				if (!socialBackingMaterial && isChildOfSocialIcon) {
+					const mat = Array.isArray(child.material) ? child.material[0] : child.material;
+					if (mat instanceof THREE.Material && mat.name.includes("Backing")) {
+						socialBackingMaterial = mat;
+					}
+				}
+
 				if (!isChildOfSocialIcon) {
 					this.setupInteractivity(child);
 				}
@@ -312,6 +324,33 @@ export class ThreeScene {
 			// Setup interactivity for social icon Groups (one hitbox per Group)
 			for (const group of this.socialIconGroups) {
 				this.setupGroupInteractivity(group);
+			}
+
+			// Create backing tile for TFT icon (matching social icon style)
+			if (tftMesh) {
+				tftMesh.updateWorldMatrix(true, false);
+				const worldPos = new THREE.Vector3();
+				const worldQuat = new THREE.Quaternion();
+				tftMesh.getWorldPosition(worldPos);
+				tftMesh.getWorldQuaternion(worldQuat);
+
+				const backingMat = socialBackingMaterial
+					? socialBackingMaterial.clone()
+					: new THREE.MeshBasicMaterial({ color: 0xF0EDE4 });
+				if ("side" in backingMat) {
+					backingMat.side = THREE.DoubleSide;
+				}
+				const backing = new THREE.Mesh(
+					new THREE.PlaneGeometry(0.55, 0.55),
+					backingMat,
+				);
+				backing.position.copy(worldPos);
+				backing.quaternion.copy(worldQuat);
+				// Offset slightly behind the icon
+				const backDir = new THREE.Vector3(0, 0, -1).applyQuaternion(worldQuat);
+				backing.position.add(backDir.multiplyScalar(0.01));
+				backing.name = "TFT_Backing";
+				glb.scene.add(backing);
 			}
 
 			// Setup smoke
@@ -431,8 +470,9 @@ export class ThreeScene {
 			}
 		}
 
-		// Nudge TFT icon slightly toward the window for a natural lean
+		// Position TFT icon on the windowsill
 		if (child.name.includes("TFT_Icon")) {
+			child.position.y -= 0.45;
 			child.position.z -= 0.05;
 		}
 
@@ -747,7 +787,7 @@ export class ThreeScene {
 			}
 
 			// Position animations
-			if (object.name.includes("LinkedIn") || object.name.includes("Name_Letter")) {
+			if (object.name.includes("Name_Letter")) {
 				gsap.to(object.position, {
 					y: object.userData.initialPosition.y + 0.2,
 					duration: 0.5,
@@ -782,7 +822,7 @@ export class ThreeScene {
 			}
 
 			// Reset position
-			if (object.name.includes("LinkedIn") || object.name.includes("Name_Letter")) {
+			if (object.name.includes("Name_Letter")) {
 				gsap.to(object.position, {
 					y: object.userData.initialPosition.y,
 					duration: 0.3,
